@@ -7,6 +7,7 @@ experimental = true
 "aqua:jqlang/jq" = "1.8.1"
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mikefarah/yq" = "4.53.2"
+"aqua:zizmorcore/zizmor" = "1.25.2"
 "go" = "1.26.3"
 
 [tasks.local-build]

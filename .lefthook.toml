@@ -14,3 +14,7 @@ stage_fixed = true
 [pre-commit.commands.shellcheck]
 glob = "*.sh"
 run = "shellcheck {staged_files}"
+
+[pre-commit.commands.zizmor]
+glob = [".github/workflows/*.yaml", ".github/actions/**/action.yaml"]
+run = "zizmor --offline {staged_files}"
