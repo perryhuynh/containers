@@ -1,12 +1,40 @@
+[settings]
+experimental = true
+
 [tools]
-"aqua:casey/just" = "1.51.0"
 "aqua:cli/cli" = "2.92.0"
 "aqua:evilmartians/lefthook" = "2.1.6"
 "aqua:jqlang/jq" = "1.8.1"
+"aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mikefarah/yq" = "4.53.2"
 "go" = "1.26.3"
+
+[tasks.local-build]
+description = "Build and test an app locally"
+dir = "{{config_root}}/.cache"
+run = '''
+set -euo pipefail
+rsync -aqIP {{config_root}}/include/ {{config_root}}/apps/"$1"/ .
+docker buildx bake --no-cache --metadata-file docker-bake.json --set=*.output=type=docker --load
+TEST_IMAGE="$(jq -r '."image-local"."image.name" | sub("^docker.io/library/"; "")' docker-bake.json)" go test -v {{config_root}}/apps/"$1"/...
+'''
+
+[tasks.remote-build]
+description = "Trigger a remote build"
+run = 'gh workflow run release.yaml -f app="$1" -f release="${2:-false}"'
+
+[tasks.generate-label-config]
+hide = true
+run = '''
+set -euo pipefail
+find "{{config_root}}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r app; do
+    yq -i ". += [{\"name\": \"app/$app\", \"color\": \"027fa0\"}]" {{config_root}}/.github/labels.yaml
+    yq -i ". += {\"app/$app\": [{\"changed-files\": [{\"any-glob-to-any-file\": [\"apps/$app/**\"]}]}]}" {{config_root}}/.github/labeler.yaml
+done
+'''
 
 [hooks]
 postinstall = [
   "mkdir -p {{config_root}}/.cache",
+  "lefthook install"
 ]
