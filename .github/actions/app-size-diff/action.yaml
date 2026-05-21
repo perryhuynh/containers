@@ -21,7 +21,7 @@ runs:
   steps:
     - name: Create package.json
       shell: bash
-      run: |-
+      run: |
         cat > package.json << 'EOF'
         {
           "dependencies": {
@@ -41,7 +41,7 @@ runs:
 
     - name: Setup Node Dependencies
       shell: bash
-      run: |-
+      run: |
         npm install
 
     - name: App Size Diff

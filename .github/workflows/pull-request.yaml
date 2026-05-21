@@ -1,5 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: Pull Request
 
 on:
@@ -60,7 +61,7 @@ jobs:
     steps:
       - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}
-        run: |-
+        run: |
           exit 1
 
       - name: All jobs passed or skipped?

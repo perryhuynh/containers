@@ -374,6 +374,7 @@ checksum = "sha256:bf52461d25017479cdc549642c4e7a2303ac5c5395d7c3d026d5d8b3fa283
 url = "https://nodejs.org/dist/v26.2.0/node-v26.2.0-linux-arm64.tar.gz"
 
 [tools.node."platforms.linux-arm64-musl"]
+checksum = "sha256:4593d822012fe3238814721909408c66f2a82955e0141457643a7a4c84e132fd"
 url = "https://unofficial-builds.nodejs.org/download/release/v26.2.0/node-v26.2.0-linux-arm64-musl.tar.gz"
 
 [tools.node."platforms.linux-x64"]
@@ -381,6 +382,7 @@ checksum = "sha256:8e5b4b969bb2414aca2ff84d2b99608511aedca32bf8a8427e6187dbdd703
 url = "https://nodejs.org/dist/v26.2.0/node-v26.2.0-linux-x64.tar.gz"
 
 [tools.node."platforms.linux-x64-musl"]
+checksum = "sha256:9efc99332e1cf70eeb85618398467c9d339bc208be65115380c611dda4c28407"
 url = "https://unofficial-builds.nodejs.org/download/release/v26.2.0/node-v26.2.0-linux-x64-musl.tar.gz"
 
 [tools.node."platforms.macos-arm64"]

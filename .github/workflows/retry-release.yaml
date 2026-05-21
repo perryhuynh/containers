@@ -1,5 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: Retry Release
 
 on:
@@ -71,7 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO_OWNER: ${{ github.repository_owner }}
           APP: ${{ matrix.app }}
-        run: |-
+        run: |
           if ! version=$(regctl image inspect "ghcr.io/${REPO_OWNER}/${APP}:rolling" \
               | jq --raw-output '.config.Labels["org.opencontainers.image.version"]' 2>/dev/null) || [[ -z "${version}" ]];
           then

@@ -1,5 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: Release
 
 on:
@@ -57,7 +58,7 @@ jobs:
         env:
           APPS: ${{ github.event_name == 'workflow_dispatch' && inputs.app || join(fromJSON(needs.prepare.outputs.changed-files), ' ') }}
         with:
-          script: |-
+          script: |
             const { APPS } = process.env;
             const appsToBuild = APPS.split(' ').filter(Boolean);
             core.setOutput('apps', JSON.stringify(appsToBuild));
@@ -100,7 +101,7 @@ jobs:
     steps:
       - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}
-        run: |-
+        run: |
           exit 1
 
       - name: All jobs passed or skipped?

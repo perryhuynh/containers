@@ -1,5 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: Deprecate App
 
 on:
@@ -45,7 +46,7 @@ jobs:
       - name: Validate App Directory
         env:
           APP: ${{ inputs.app }}
-        run: |-
+        run: |
           if [[ ! -d "./apps/${APP}" ]]; then
             echo "::error::App directory './apps/${APP}' does not exist"
             exit 1
@@ -54,7 +55,7 @@ jobs:
       - name: Delete App Directory
         env:
           APP: ${{ inputs.app }}
-        run: |-
+        run: |
           rm -rf ./apps/${APP}
 
       - name: Create Pull Request
@@ -92,7 +93,7 @@ jobs:
           PULL_NUMBER: ${{ needs.plan.outputs.pull-number }}
         with:
           github-token: ${{ steps.app-token.outputs.token }}
-          script: |-
+          script: |
             await github.rest.pulls.merge({
               owner: context.repo.owner,
               repo: context.repo.repo,

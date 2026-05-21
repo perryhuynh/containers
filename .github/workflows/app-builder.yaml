@@ -1,5 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
 name: App Builder
 
 on:
@@ -106,7 +107,7 @@ jobs:
         env:
           PLATFORM: ${{ matrix.platform }}
         with:
-          script: |-
+          script: |
             core.setOutput('arch', process.env.PLATFORM.split('/').pop());
 
       - name: Get App Options
@@ -132,7 +133,7 @@ jobs:
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
 
       - name: Add Include Directory to Build Context
-        run: |-
+        run: |
           rsync -a --ignore-existing --progress ./include/ "./apps/${APP}/"
 
       - name: Build App
@@ -160,7 +161,7 @@ jobs:
       - name: Export Digest
         env:
           METADATA: ${{ steps.bake.outputs.metadata }}
-        run: |-
+        run: |
           mkdir -p "${RUNNER_TEMP}/digests"
           DIGEST=$(jq -r '.image["containerimage.digest"]' <<< "$METADATA")
           touch "${RUNNER_TEMP}/digests/${DIGEST#sha256:}"
@@ -214,20 +215,20 @@ jobs:
 
       - name: Create Manifest List and Push
         working-directory: ${{ runner.temp }}/digests
-        run: |-
+        run: |
           IMAGE="ghcr.io/${REPO_OWNER}/${APP}"
           docker buildx imagetools create \
               $(jq --raw-output --compact-output --arg image "$IMAGE" '.target."docker-metadata-action".tags | map(select(startswith($image)) | "-t " + .) | join(" ")' "${RUNNER_TEMP}/docker-metadata-action-bake.json") \
               $(printf "${IMAGE}@sha256:%s " *)
 
       - name: Inspect Image
-        run: |-
+        run: |
           TAG=$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' "${RUNNER_TEMP}/docker-metadata-action-bake.json")
           docker buildx imagetools inspect "ghcr.io/${REPO_OWNER}/${APP}:${TAG}"
 
       - name: Export Digest
         id: digest
-        run: |-
+        run: |
           TAG=$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' "${RUNNER_TEMP}/docker-metadata-action-bake.json")
           DIGEST=$(docker buildx imagetools inspect "ghcr.io/${REPO_OWNER}/${APP}:${TAG}" --format '{{ json . }}' | jq --raw-output '.manifest.digest')
           echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
@@ -271,7 +272,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
-        run: |-
+        run: |
           gh attestation verify --repo "$REPO" "oci://ghcr.io/${REPO_OWNER}/${APP}@${DIGEST}"
 
   test:

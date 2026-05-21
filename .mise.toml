@@ -36,7 +36,6 @@ run = 'gh workflow run release.yaml -f app="$usage_app" -f release="${usage_rele
 hide = true
 run = '''
 find "{{config_root}}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r app; do
-    yq -i ". += [{\"name\": \"app/$app\", \"color\": \"027fa0\"}]" {{config_root}}/.github/labels.yaml
     yq -i ". += {\"app/$app\": [{\"changed-files\": [{\"any-glob-to-any-file\": [\"apps/$app/**\"]}]}]}" {{config_root}}/.github/labeler.yaml
 done
 '''
