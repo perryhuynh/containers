@@ -24,4 +24,4 @@ if [[ "${DB_BACKEND}" == "sqlite" && ! -s /config/db.sqlite ]]; then
     npm run sqlite:migrate
 fi
 
-exec npx tsx src/app.ts "$@"
+exec ./node_modules/.bin/tsx src/app.ts "$@"
