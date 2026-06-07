@@ -1,16 +1,16 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "postgres-init"
+  default = "lostcity"
 }
 
 variable "VERSION" {
-  // renovate: datasource=docker depName=docker.io/library/postgres versioning=docker
-  default = "18.4-alpine3.23"
+  // renovate: datasource=git-refs depName=https://github.com/LostCityRS/Engine-TS versioning=loose
+  default = "254"
 }
 
 variable "SOURCE" {
-  default = "https://github.com/postgres/postgres"
+  default = "https://github.com/LostCityRS/Engine-TS"
 }
 
 group "default" {
