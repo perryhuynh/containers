@@ -2,7 +2,7 @@
 
 ARG VERSION
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a AS client-builder
+FROM mirror.gcr.io/oven/bun:1.3.14-alpine@sha256:5acc90a93e91ff07bf72aa90a7c9f0fa189765aec90b47bdbf2152d2196383c0 AS client-builder
 ARG VERSION
 
 WORKDIR /build/client
@@ -11,7 +11,7 @@ RUN wget -qO- "https://github.com/LostCityRS/Client-TS/archive/refs/heads/${VERS
     && HUSKY=0 bun install --frozen-lockfile \
     && bun run build
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a AS engine-builder
+FROM mirror.gcr.io/oven/bun:1.3.14-alpine@sha256:5acc90a93e91ff07bf72aa90a7c9f0fa189765aec90b47bdbf2152d2196383c0 AS engine-builder
 ARG VERSION
 
 RUN apk add --no-cache \
@@ -32,7 +32,7 @@ RUN HUSKY=0 bun install --frozen-lockfile \
     && BUILD_SRC_DIR=/build/content bun run build \
     && bun run sqlite:migrate
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a
+FROM mirror.gcr.io/oven/bun:1.3.14-alpine@sha256:5acc90a93e91ff07bf72aa90a7c9f0fa189765aec90b47bdbf2152d2196383c0
 
 RUN apk add --no-cache \
         bash \
