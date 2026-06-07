@@ -51,7 +51,11 @@ RUN chown -R root:root /app \
     && mkdir -p /config /app/engine/data \
     && rm -rf /app/engine/data/players \
     && ln -s /config/players /app/engine/data/players \
-    && chown -R nobody:nogroup /config /app/engine/data /app/content/pack
+    && mkdir -p /usr/share/lostcity \
+    && cp -a /app/content/pack /usr/share/lostcity/bootstrap-pack \
+    && LOSTCITY_PACK_HASH="$(find /usr/share/lostcity/bootstrap-pack -type f | sort | xargs sha256sum | sha256sum | awk '{print $1}')" \
+    && printf '%s\n' "${LOSTCITY_PACK_HASH}" > /usr/share/lostcity/bootstrap-pack/.lostcity-pack-hash \
+    && chown -R nobody:nogroup /config /app/engine/data /app/content/pack /usr/share/lostcity
 
 COPY . /
 RUN chmod 755 /entrypoint.sh
