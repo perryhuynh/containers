@@ -6,7 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=git-refs depName=https://github.com/LostCityRS/Engine-TS versioning=loose
-  default = "254"
+  default = "530-wip"
 }
 
 variable "SOURCE" {
