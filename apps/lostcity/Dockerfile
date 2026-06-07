@@ -11,11 +11,15 @@ RUN wget -qO- "https://github.com/LostCityRS/Client-TS/archive/refs/heads/${VERS
     && HUSKY=0 bun install --frozen-lockfile \
     && bun run build
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a AS engine-builder
+FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf AS engine-builder
 ARG VERSION
 
-RUN apk add --no-cache \
-        openjdk17-jre-headless
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        ca-certificates \
+        openjdk-17-jre-headless \
+        wget \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 RUN mkdir engine content \
@@ -26,20 +30,22 @@ RUN mkdir engine content \
 COPY --from=client-builder /build/client/out /build/client/out
 
 WORKDIR /build/engine
-RUN HUSKY=0 bun install --frozen-lockfile \
+RUN HUSKY=0 npm ci \
     && cp /build/client/out/client.js public/client/client.js \
     && cp /build/client/out/tinymidipcm.wasm public/client/tinymidipcm.wasm \
-    && BUILD_SRC_DIR=/build/content bun run build \
-    && bun run sqlite:migrate
+    && BUILD_SRC_DIR=/build/content npm run build \
+    && npm run sqlite:migrate
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a
+FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf
 
-RUN apk add --no-cache \
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
         bash \
         ca-certificates \
         catatonit \
-        openjdk17-jre-headless \
-        tzdata
+        openjdk-17-jre-headless \
+        tzdata \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=engine-builder /build/engine /app/engine
 COPY --from=engine-builder /build/content /app/content

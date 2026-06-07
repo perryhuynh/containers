@@ -21,7 +21,7 @@ export WEB_MANAGEMENT_PORT="${WEB_MANAGEMENT_PORT:-8898}"
 export WEB_PORT="${WEB_PORT:-8888}"
 
 if [[ "${DB_BACKEND}" == "sqlite" && ! -s /config/db.sqlite ]]; then
-    bun run sqlite:migrate
+    npm run sqlite:migrate
 fi
 
-exec bun run src/app.ts "$@"
+exec npx tsx src/app.ts "$@"
