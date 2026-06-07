@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p /config/players /app/engine/data
-
-if [[ ! -e /app/engine/db.sqlite && ! -L /app/engine/db.sqlite ]]; then
-    ln -s /config/db.sqlite /app/engine/db.sqlite
-fi
-
-rm -rf /app/engine/data/players
-ln -s /config/players /app/engine/data/players
+mkdir -p /config/players
 
 export BUILD_SRC_DIR="${BUILD_SRC_DIR:-/app/content}"
 export DB_BACKEND="${DB_BACKEND:-sqlite}"

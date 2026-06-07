@@ -49,6 +49,8 @@ RUN chown -R root:root /app \
     && rm -f /app/engine/db.sqlite \
     && ln -s /config/db.sqlite /app/engine/db.sqlite \
     && mkdir -p /config /app/engine/data \
+    && rm -rf /app/engine/data/players \
+    && ln -s /config/players /app/engine/data/players \
     && chown -R nobody:nogroup /config /app/engine/data /app/content/pack
 
 COPY . /
