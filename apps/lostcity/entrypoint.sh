@@ -20,6 +20,41 @@ export NODE_PORT="${NODE_PORT:-43594}"
 export WEB_MANAGEMENT_PORT="${WEB_MANAGEMENT_PORT:-8898}"
 export WEB_PORT="${WEB_PORT:-8888}"
 
+node <<'EOF'
+const fs = require('fs');
+const path = require('path');
+
+const configPath = '/app/engine/data/config/world.json';
+const configDir = path.dirname(configPath);
+
+let config = {};
+if (fs.existsSync(configPath)) {
+    config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+}
+
+config.easyStartup = process.env.EASY_STARTUP === 'true';
+config.build = {
+    ...config.build,
+    srcDir: process.env.BUILD_SRC_DIR
+};
+config.db = {
+    ...config.db,
+    backend: process.env.DB_BACKEND
+};
+config.node = {
+    ...config.node,
+    port: Number(process.env.NODE_PORT)
+};
+config.web = {
+    ...config.web,
+    managementPort: Number(process.env.WEB_MANAGEMENT_PORT),
+    port: Number(process.env.WEB_PORT)
+};
+
+fs.mkdirSync(configDir, { recursive: true });
+fs.writeFileSync(configPath, JSON.stringify(config, null, 4) + '\n');
+EOF
+
 if [[ "${DB_BACKEND}" == "sqlite" && ! -s /config/db.sqlite ]]; then
     npm run sqlite:migrate
 fi
