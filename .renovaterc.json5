@@ -23,33 +23,7 @@
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
   ],
-  customDatasources: {
-    qbittorrent: {
-      defaultRegistryUrlTemplate: "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json",
-      format: "json",
-      transformTemplates: ['{"releases":[{"version": qbittorrent}]}'],
-    },
-    "servarr-develop": {
-      defaultRegistryUrlTemplate: "https://{{packageName}}.servarr.com/v1/update/develop/changes?os=linux&runtime=netcore",
-      format: "json",
-      transformTemplates: ['{"releases":[{"version": $[0].version}]}'],
-    },
-    "servarr-nightly": {
-      defaultRegistryUrlTemplate: "https://{{packageName}}.servarr.com/v1/update/nightly/changes?os=linux&runtime=netcore",
-      format: "json",
-      transformTemplates: ['{"releases":[{"version": $[0].version}]}'],
-    },
-    "sonarr-develop": {
-      defaultRegistryUrlTemplate: "https://services.sonarr.tv/v1/update/develop/changes?os=linux&runtime=netcore&version=4.0",
-      format: "json",
-      transformTemplates: ['{"releases":[{"version": $[0].version}]}'],
-    },
-    plex: {
-      defaultRegistryUrlTemplate: "https://plex.tv/api/downloads/5.json",
-      format: "json",
-      transformTemplates: ['{"releases":[{"version": computer.Linux.version}]}'],
-    },
-  },
+  customDatasources: {},
   packageRules: [
     {
       description: ["Release Rules for App Updates"],
@@ -67,6 +41,12 @@
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
+    },
+    {
+      description: ["Allowed LostCity Engine Version Refs"],
+      matchDatasources: ["git-refs"],
+      matchPackageNames: ["https://github.com/LostCityRS/Engine-TS"],
+      allowedVersions: "/^\\d+$/",
     },
     {
       description: ["Allowed Ubuntu Version for Base Images"],
@@ -100,20 +80,6 @@
       matchFileNames: ["**/Dockerfile"],
       matchPackageNames: ["/python/"],
       allowedVersions: "/3\\.14-slim/",
-    },
-    {
-      description: ["Allowed Python Version for ESPHome Base Image"],
-      matchDatasources: ["docker"],
-      matchFileNames: ["apps/esphome/Dockerfile"],
-      matchPackageNames: ["/python/"],
-      allowedVersions: "/3\\.13-slim/",
-    },
-    {
-      description: ["Allowed Java Version for NZBHydra2 Base Image"],
-      matchDatasources: ["docker"],
-      matchFileNames: ["apps/nzbhydra2/Dockerfile"],
-      matchPackageNames: ["/amazoncorretto/"],
-      allowedVersions: "/17-alpine3\\.22/",
     },
   ],
 }
