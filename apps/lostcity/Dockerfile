@@ -33,8 +33,7 @@ WORKDIR /build/engine
 RUN HUSKY=0 npm ci \
     && cp /build/client/out/client.js public/client/client.js \
     && cp /build/client/out/tinymidipcm.wasm public/client/tinymidipcm.wasm \
-    && BUILD_SRC_DIR=/build/content npm run build \
-    && npm run sqlite:migrate
+    && BUILD_SRC_DIR=/build/content npm run build
 
 FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf
 

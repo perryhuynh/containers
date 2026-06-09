@@ -8,7 +8,7 @@ import (
 )
 
 func Test(t *testing.T) {
-	image := testhelpers.GetTestImage("ghcr.io/home-operations/lostcity:rolling")
+	image := testhelpers.GetTestImage("ghcr.io/perryhuynh/lostcity:rolling")
 
 	testhelpers.TestFileExists(t, image, "/app/engine/src/app.ts", nil)
 	testhelpers.TestFileExists(t, image, "/app/content/pack/loc.pack", nil)
