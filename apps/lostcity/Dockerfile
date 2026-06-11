@@ -11,7 +11,7 @@ RUN wget -qO- "https://github.com/LostCityRS/Client-TS/archive/refs/heads/${VERS
     && HUSKY=0 bun install --frozen-lockfile \
     && bun run build
 
-FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf AS engine-builder
+FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:2c87ef9bd3c6a3bd4b472b4bec2ce9d16354b0c574f736c476489d09f560a203 AS engine-builder
 ARG VERSION
 
 RUN apt-get update \
@@ -35,7 +35,7 @@ RUN HUSKY=0 npm ci \
     && cp /build/client/out/tinymidipcm.wasm public/client/tinymidipcm.wasm \
     && BUILD_SRC_DIR=/build/content npm run build
 
-FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf
+FROM mirror.gcr.io/library/node:24.16.0-slim@sha256:2c87ef9bd3c6a3bd4b472b4bec2ce9d16354b0c574f736c476489d09f560a203
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
