@@ -115,6 +115,33 @@ func TestHTTPEndpoint(t *testing.T, image string, httpConfig HTTPTestConfig, con
 	_ = runContainer(t, t.Context(), image, opts...)
 }
 
+// TestUDPListening tests that the container's default process binds the given UDP port.
+//
+// UDP has no connection handshake, so wait.ForListeningPort is unreliable for it. Instead we
+// run the image's normal entrypoint and poll /proc/net/udp (and udp6) from inside the container
+// until the port shows up as bound. The local_address column encodes the port as uppercase hex,
+// so e.g. 6262 -> "1876". This needs no extra packages in the image (/proc is world-readable).
+func TestUDPListening(t *testing.T, image string, port int, config *ContainerConfig) {
+	t.Helper()
+
+	hexPort := fmt.Sprintf("%04X", port)
+	// Match ":<HEXPORT> " in the local_address column of /proc/net/udp{,6}.
+	check := fmt.Sprintf("grep -qE ':%s ' /proc/net/udp /proc/net/udp6", hexPort)
+
+	opts := []testcontainers.ContainerCustomizer{
+		testcontainers.WithExposedPorts(fmt.Sprintf("%d/udp", port)),
+		testcontainers.WithWaitStrategy(
+			wait.ForExec([]string{"sh", "-c", check}).
+				WithStartupTimeout(60 * time.Second).
+				WithExitCodeMatcher(func(code int) bool { return code == 0 }),
+		),
+	}
+
+	opts = append(opts, applyContainerConfig(config)...)
+
+	_ = runContainer(t, t.Context(), image, opts...)
+}
+
 // TestFileExists tests that a file exists in the container
 func TestFileExists(t *testing.T, image string, filePath string, config *ContainerConfig) {
 	t.Helper()
