@@ -22,7 +22,12 @@ RUN wget -qO- "https://github.com/iib0011/omni-tools/archive/refs/tags/v${VERSIO
 
 FROM mirror.gcr.io/library/caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
 
-RUN apk add --no-cache catatonit
+RUN apk add --no-cache catatonit \
+    && apk add --no-cache --virtual .cap libcap \
+    # Remove cap_net_bind_service file capability so the binary can be exec'd
+    # under no_new_privs (allowPrivilegeEscalation: false); it binds :8080 only.
+    && setcap -r /usr/bin/caddy \
+    && apk del .cap
 
 COPY --from=builder /build/dist /usr/share/caddy
 
