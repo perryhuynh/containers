@@ -1,6 +1,9 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["github>home-operations/renovate-config"],
+  // No helm charts in this repo; disable helm-docs/helm-schema tasks
+  // inherited from the shared preset (binaries absent in the Renovate image).
+  postUpgradeTasks: { commands: [], fileFilters: [] },
   customManagers: [
     {
       customType: "regex",
