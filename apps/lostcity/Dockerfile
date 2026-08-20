@@ -2,7 +2,7 @@
 
 ARG VERSION
 
-FROM mirror.gcr.io/oven/bun:1.2.23-alpine@sha256:0841c588f6304300baf1d395ae339ce09a6e18c4b6a7cdd4fddcbdb87a2f096a AS client-builder
+FROM mirror.gcr.io/oven/bun:1.4.0-alpine@sha256:07235578f79ef8c6f97d94aee7938e76f5cdba5f21ae5dbfdd3d3d38058437eb AS client-builder
 ARG VERSION
 
 WORKDIR /build/client
