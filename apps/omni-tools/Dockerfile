@@ -20,7 +20,7 @@ RUN wget -qO- "https://github.com/iib0011/omni-tools/archive/refs/tags/v${VERSIO
     && npm ci --ignore-scripts \
     && npm run build
 
-FROM mirror.gcr.io/library/caddy:2.11.6-alpine@sha256:c776e0c6413b544d0459665e54ec7b8b2a15000c0cbee8b254da0067b1d184ff
+FROM mirror.gcr.io/library/caddy:2.11.6-alpine@sha256:d44355d3c2149dc580ce2cac735955d1c08d3d00882c30489c241aa51a5c10d9
 
 RUN apk add --no-cache catatonit \
     && apk add --no-cache --virtual .cap libcap \
