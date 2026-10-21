@@ -2,7 +2,7 @@
 
 ARG VERSION
 
-FROM mirror.gcr.io/library/node:24.22.0-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS builder
+FROM mirror.gcr.io/library/node:24.22.0-slim@sha256:91acba91b842bec0bf7ea6f5e09c644c7ccad72c4996ed9616d861d1c7cd60d4 AS builder
 ARG VERSION
 ENV \
     HUSKY=0 \
