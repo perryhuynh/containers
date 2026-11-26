@@ -11,12 +11,12 @@ ENV \
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         ca-certificates \
-        wget \
+        git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
-RUN wget -qO- "https://github.com/iib0011/omni-tools/archive/refs/tags/v${VERSION}.tar.gz" \
-    | tar xzf - --strip-components=1 \
+# Vite reads the upstream commit hash from the checkout at build time.
+RUN git clone --depth 1 --branch "v${VERSION}" https://github.com/iib0011/omni-tools.git . \
     && npm ci --ignore-scripts \
     && npm run build
 
